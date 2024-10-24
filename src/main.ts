@@ -245,7 +245,7 @@ function onColorChange(e: Event) {
     selectedColor = value;
 }
 
-function onToolPress(tool: Tools) {
+async function onToolPress(tool: Tools) {
     switch (tool) {
         case Tools.Draw:
             strokeWidth = 2;
@@ -260,8 +260,23 @@ function onToolPress(tool: Tools) {
             break;
         // case Tools.Fill:
         //     break;
-        // case Tools.Picker:
-        //     break;
+        case Tools.Picker:
+            const previousTool = selectedTool;
+            selectedTool = tool;
+            refreshTools();
+            const dropper = new (window as any).EyeDropper();
+
+            try {
+                const result = await dropper.open();
+                const { sRGBHex } = result;
+
+                selectedColor = sRGBHex;
+                $colorPicker.value = sRGBHex;
+                tool = previousTool;
+            } catch (e) {
+                // :)
+            }
+            break;
         // case Tools.Save:
         //     break;
         case Tools.Trash:
