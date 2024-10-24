@@ -39,8 +39,19 @@
             </div>
         </main>
 
-        <footer class="py-2 bg-background-500">
-            <input type="color" id="color-picker" />
+        <footer class="bg-background-500">
+            <div class="py-2 border-b-2 border-b-background-800">
+                <input type="color" id="color-picker" />
+            </div>
+            <div
+                id="details"
+                class="text-xs flex items-center justify-end border-t-2 border-t-background-200 p-1 gap-1"
+            >
+                <div class="win-border-inv flex-1 p-1">Drawing with pencil</div>
+                <div class="win-border-inv p-1">Brush Size: 2</div>
+                <div class="win-border-inv p-1">Canvas Dimensions: 100px</div>
+                <div class="h-6 w-6"></div>
+            </div>
         </footer>
     </body>
 </html>
