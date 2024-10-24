@@ -25,6 +25,9 @@
     .win-border {
         @apply border-win border-l-background-100 border-t-background-100 border-r-background-500 border-b-background-500 bg-background-500;
     }
+    .win-border-inv {
+        @apply border-win border-b-background-100 border-r-background-100 border-l-background-800 border-t-background-800 bg-background-500;
+    }
 
     .win-hover {
         box-shadow: 2px 2px black, inset 1px 1px white;
