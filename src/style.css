@@ -3,14 +3,12 @@
 @tailwind utilities;
 
 :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Arial, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
     color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
+    color: black;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -21,4 +19,47 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+@layer components {
+    .win-border {
+        @apply border-win border-l-background-100 border-t-background-100 border-r-background-500 border-b-background-500 bg-background-500;
+    }
+
+    .win-hover {
+        box-shadow: 2px 2px black, inset 1px 1px white;
+    }
+}
+
+nav button {
+    @apply relative px-2 border-win border-transparent hover:win-hover;
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        left: 0.5rem;
+        width: 1ch;
+        height: 1px;
+        background-color: black;
+    }
+}
+
+aside ul li {
+    @apply aspect-square h-7 grid place-items-center;
+
+    border-width: 1px;
+    box-shadow: 1px 1px black, inset 1px 1px white;
+    border-color: transparent;
+
+    &:hover {
+        border-right-color: black;
+        border-bottom-color: black;
+        border-left-color: white;
+        border-top-color: white;
+    }
+
+    &.active {
+        box-shadow: 1px 1px white, inset 1px 1px black;
+    }
 }
