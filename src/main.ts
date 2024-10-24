@@ -56,9 +56,41 @@ const Buttons = [
     },
 ];
 
+const ColorSwatches = [
+    "#000000",
+    "#FFFFFF",
+    "#818080",
+    "#C1BEC1",
+    "#7D0201",
+    "#EE0706",
+    "#7E7E00",
+    "#F6F706",
+    "#078102",
+    "#02FC07",
+    "#027B77",
+    "#01FCFD",
+    "#07017B",
+    "#0004FB",
+    "#790283",
+    "#FA03FC",
+    "#828042",
+    "#FEFC85",
+    "#044343",
+    "#03FD81",
+    "#067FF3",
+    "#82FDFC",
+    "#004082",
+    "#7E7EF8",
+    "#3E03FD",
+    "#F40481",
+    "#833B01",
+    "#FD8344",
+];
+
 // Elements
 const $canvas = $("#canvas") as HTMLCanvasElement;
 const $colorPicker = $("#color-picker") as HTMLInputElement;
+const $colorSwatch = $("#color-swatch") as HTMLUListElement;
 const $toolsList = $("aside ul") as HTMLUListElement;
 const $canvasContainer = $("#canvas-container") as HTMLDivElement;
 const $cursor = $("#cursor") as HTMLDivElement;
@@ -82,8 +114,11 @@ function start() {
     };
 
     selectedColor = "#000000";
+    const $container = $("#color-bar > li:first-child") as HTMLLIElement;
+    $container.style.backgroundColor = selectedColor;
 
     createButtons();
+    createSwatches();
 
     bindEvents();
 
@@ -98,6 +133,20 @@ function createButtons() {
         $li.title = button.label;
         $toolsList.appendChild($li);
         $li.querySelector("button")!.addEventListener("click", () => onToolPress(button.action));
+    });
+}
+
+function createSwatches() {
+    ColorSwatches.forEach((color) => {
+        const $li = document.createElement("li");
+        $li.style.backgroundColor = color;
+        $li.addEventListener("click", () => {
+            selectedColor = color;
+            $colorPicker.value = color;
+            const $container = $("#color-bar > li:first-child") as HTMLLIElement;
+            $container.style.backgroundColor = color;
+        });
+        $colorSwatch.appendChild($li);
     });
 }
 
@@ -243,6 +292,10 @@ function onMouseUp(e: MouseEvent) {
 function onColorChange(e: Event) {
     const { value } = e.target as HTMLInputElement;
     selectedColor = value;
+    ctx.strokeStyle = value;
+
+    const $container = $("#color-bar > li:first-child") as HTMLLIElement;
+    $container.style.backgroundColor = value;
 }
 
 async function onToolPress(tool: Tools) {
@@ -272,6 +325,9 @@ async function onToolPress(tool: Tools) {
 
                 selectedColor = sRGBHex;
                 $colorPicker.value = sRGBHex;
+                const $container = $("#color-bar > li:first-child") as HTMLLIElement;
+                $container.style.backgroundColor = selectedColor;
+
                 tool = previousTool;
             } catch (e) {
                 // :)

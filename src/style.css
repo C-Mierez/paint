@@ -80,3 +80,36 @@ aside ul li {
     visibility: hidden;
     transform: translate(-50%, -50%);
 }
+
+input[type="color"] {
+    @apply h-6 w-6;
+    inline-size: 24px;
+    block-size: 24px;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    aspect-ratio: 1;
+}
+
+/* class="grid grid-rows-2 w-full grid-flow-col" */
+
+#color-bar > li:first-child {
+    @apply relative h-12 w-12 block win-border-inv;
+
+    & > input {
+        @apply absolute inset-0 w-full h-full opacity-0 cursor-pointer;
+    }
+}
+
+#color-swatch {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: column;
+
+    & > li {
+        @apply relative h-6 w-6 block win-border-inv;
+    }
+}

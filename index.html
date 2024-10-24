@@ -41,9 +41,14 @@
         </main>
 
         <footer class="bg-background-500">
-            <div class="py-2 border-b-2 border-b-background-800">
-                <input type="color" id="color-picker" />
-            </div>
+            <ul id="color-bar" class="py-2 border-b-2 border-b-background-800 flex gap-1">
+                <li>
+                    <input type="color" id="color-picker" />
+                </li>
+                <li>
+                    <ul id="color-swatch"> </ul>
+                </li>
+            </ul>
             <div
                 id="details"
                 class="text-xs flex items-center justify-end border-t-2 border-t-background-200 p-1 gap-1"
