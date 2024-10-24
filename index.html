@@ -4,8 +4,43 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite + TS</title>
+        <title>Paint</title>
         <script type="module" src="/src/main.ts"></script>
     </head>
-    <body> </body>
+    <body class="h-screen win-border flex flex-col">
+        <header>
+            <div class="bg-primary-500 flex gap-2 py-1 items-center justify-between text-white">
+                <div class="flex gap-2 items-center">
+                    <img src="/logo.png" alt="Paint Logo" class="aspect-square w-auto h-6 pl-2" />
+                    <h1 class="text-sm font-bold">untitled <span> - Paint</span></h1>
+                </div>
+                <div class="px-2 flex gap-2 items-center text-xs text-black font-bold">
+                    <button class="aspect-square w-5 grid place-items-center win-border">🗕</button>
+                    <button class="aspect-square w-5 grid place-items-center win-border">🗖</button>
+                    <button class="aspect-square w-5 grid place-items-center win-border">✕</button>
+                </div>
+            </div>
+            <nav class="flex">
+                <button>File</button>
+                <button>Edit</button>
+                <button>View</button>
+                <button>Image</button>
+                <button>Options</button>
+                <button>Help</button>
+            </nav>
+        </header>
+
+        <main class="flex-1 flex">
+            <aside>
+                <ul class="grid grid-cols-2"> </ul>
+            </aside>
+            <div class="bg-background-800 w-full">
+                <canvas id="canvas" height="600" width="900" class="bg-white"></canvas>
+            </div>
+        </main>
+
+        <footer class="py-2 bg-background-500">
+            <input type="color" id="color-picker" />
+        </footer>
+    </body>
 </html>
