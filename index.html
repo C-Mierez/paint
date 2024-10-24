@@ -34,7 +34,8 @@
             <aside>
                 <ul class="grid grid-cols-2"> </ul>
             </aside>
-            <div class="bg-background-800 w-full win-border-inv">
+            <div id="canvas-container" class="bg-background-800 w-full win-border-inv relative">
+                <div id="cursor" class="cursor"></div>
                 <canvas id="canvas" height="600" width="900" class="bg-white"></canvas>
             </div>
         </main>
@@ -48,7 +49,7 @@
                 class="text-xs flex items-center justify-end border-t-2 border-t-background-200 p-1 gap-1"
             >
                 <div class="win-border-inv flex-1 p-1">Drawing with pencil</div>
-                <div class="win-border-inv p-1">Brush Size: 2</div>
+                <div id="size" class="win-border-inv p-1">Brush Size: <span>2</span>px</div>
                 <div class="win-border-inv p-1">Canvas Dimensions: 100px</div>
                 <div class="h-6 w-6"></div>
             </div>

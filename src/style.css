@@ -66,3 +66,17 @@ aside ul li {
         box-shadow: 1px 1px white, inset 1px 1px black;
     }
 }
+
+.cursor {
+    position: absolute;
+
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-color: transparent;
+
+    pointer-events: none;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+}

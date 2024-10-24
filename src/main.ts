@@ -60,6 +60,9 @@ const Buttons = [
 const $canvas = $("#canvas") as HTMLCanvasElement;
 const $colorPicker = $("#color-picker") as HTMLInputElement;
 const $toolsList = $("aside ul") as HTMLUListElement;
+const $canvasContainer = $("#canvas-container") as HTMLDivElement;
+const $cursor = $("#cursor") as HTMLDivElement;
+const $sizeIndicator = $("#size") as HTMLDivElement;
 
 const ctx = $canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -67,6 +70,7 @@ const ctx = $canvas.getContext("2d") as CanvasRenderingContext2D;
 let selectedTool: Tools;
 let canvasState: CanvasState;
 let selectedColor;
+let strokeWidth = 2;
 let layerState: LayerState;
 let imageData: ImageData;
 
@@ -82,6 +86,7 @@ function start() {
 
     bindEvents();
 
+    refreshCursor();
     refreshTools();
 }
 
@@ -104,6 +109,19 @@ function bindEvents() {
 
     // Color Picker
     $colorPicker.addEventListener("change", onColorChange);
+
+    // Cursor stroke size indicator
+    $canvasContainer.addEventListener("mouseenter", (_) => {
+        $cursor.style.visibility = "visible";
+    });
+    $canvasContainer.addEventListener("mousemove", (e) => {
+        const { offsetX, offsetY } = e as MouseEvent;
+        $cursor.style.top = `${offsetY}px`;
+        $cursor.style.left = `${offsetX}px`;
+    });
+    $canvasContainer.addEventListener("mouseleave", (_) => {
+        $cursor.style.visibility = "hidden";
+    });
 }
 
 /* ----------------------------- Event Handlers ----------------------------- */
@@ -112,10 +130,13 @@ function onMouseDown(e: MouseEvent) {
 
     const { offsetX: x, offsetY: y } = e;
 
+    ctx.lineWidth = strokeWidth;
+    ctx.strokeStyle = selectedColor!;
+
     switch (selectedTool) {
         case Tools.Rectangle:
             imageData = ctx.getImageData(0, 0, $canvas.width, $canvas.height);
-
+            ctx.globalCompositeOperation = "source-over";
             canvasState = {
                 mode: CanvasMode.Inserting,
                 layerType: LayerType.Rectangle,
@@ -131,7 +152,6 @@ function onMouseDown(e: MouseEvent) {
             break;
         case Tools.Erase:
             ctx.globalCompositeOperation = "destination-out";
-            ctx.lineWidth = 10;
             canvasState = {
                 mode: CanvasMode.Erasing,
                 lastPoint: { x, y },
@@ -139,7 +159,6 @@ function onMouseDown(e: MouseEvent) {
             break;
         case Tools.Draw:
             ctx.globalCompositeOperation = "source-over";
-            ctx.lineWidth = 2;
             canvasState = {
                 mode: CanvasMode.Pencil,
                 lastPoint: { x, y },
@@ -161,7 +180,6 @@ function onMouseMove(e: MouseEvent) {
         case CanvasMode.Erasing:
             // Draw
             ctx.beginPath();
-            ctx.strokeStyle = selectedColor!;
 
             ctx.moveTo(canvasState.lastPoint.x, canvasState.lastPoint.y);
 
@@ -228,18 +246,17 @@ function onColorChange(e: Event) {
 
 function onToolPress(tool: Tools) {
     switch (tool) {
-        // case Tools.Draw:
-        //     break;
-        // case Tools.Erase:
-        //     break;
+        case Tools.Draw:
+            strokeWidth = 2;
+            break;
+        case Tools.Erase:
+            strokeWidth = 10;
+            break;
         // case Tools.Ellipse:
         //     break;
-        // case Tools.Rectangle:
-        //     canvasState = {
-        //         mode: CanvasMode.Inserting,
-        //         layerType: LayerType.Rectangle,
-        //     };
-        //     break;
+        case Tools.Rectangle:
+            strokeWidth = 2;
+            break;
         // case Tools.Fill:
         //     break;
         // case Tools.Picker:
@@ -256,9 +273,11 @@ function onToolPress(tool: Tools) {
             };
             break;
         default:
-            selectedTool = tool;
             break;
     }
+    selectedTool = tool;
+
+    refreshCursor();
 
     refreshTools();
 }
@@ -274,6 +293,13 @@ function refreshTools() {
 
     const $button = $toolsList.querySelector(`li:nth-child(${selectedTool + 1})`);
     $button!.classList.add("active");
+}
+
+function refreshCursor() {
+    $cursor.style.height = `${Math.max(4, strokeWidth)}px`;
+    $cursor.style.width = `${Math.max(4, strokeWidth)}px`;
+
+    $sizeIndicator.querySelector("span")!.textContent = `${strokeWidth}`;
 }
 /* -------------------------------- Internal -------------------------------- */
 
