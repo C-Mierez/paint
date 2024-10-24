@@ -15,22 +15,22 @@ enum Tools {
 }
 const Buttons = [
     {
-        label: "Draw",
+        label: "Drawing with Pencil",
         icon: "/icons/draw.png",
         action: Tools.Draw,
     },
     {
-        label: "Erase",
+        label: "Erasing",
         icon: "/icons/erase.png",
         action: Tools.Erase,
     },
     {
-        label: "Ellipse",
+        label: "Ellipse Tool",
         icon: "/icons/ellipse.png",
         action: Tools.Ellipse,
     },
     {
-        label: "Rectangle",
+        label: "Rectangle Tool",
         icon: "/icons/rectangle.png",
         action: Tools.Rectangle,
     },
@@ -40,17 +40,17 @@ const Buttons = [
         action: Tools.Fill,
     },
     {
-        label: "Picker",
+        label: "Color Picker",
         icon: "/icons/picker.png",
         action: Tools.Picker,
     },
     {
-        label: "Trash",
+        label: "Clear Canvas",
         icon: "/icons/trash.png",
         action: Tools.Trash,
     },
     {
-        label: "Save",
+        label: "Save Drawing",
         icon: "/icons/save.png",
         action: Tools.Save,
     },
@@ -63,6 +63,7 @@ const $toolsList = $("aside ul") as HTMLUListElement;
 const $canvasContainer = $("#canvas-container") as HTMLDivElement;
 const $cursor = $("#cursor") as HTMLDivElement;
 const $sizeIndicator = $("#size") as HTMLDivElement;
+const $toolIndicator = $("#tool") as HTMLDivElement;
 
 const ctx = $canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -293,6 +294,8 @@ function refreshTools() {
 
     const $button = $toolsList.querySelector(`li:nth-child(${selectedTool + 1})`);
     $button!.classList.add("active");
+
+    $toolIndicator.textContent = Buttons[selectedTool].label;
 }
 
 function refreshCursor() {
