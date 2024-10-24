@@ -93,9 +93,11 @@ const $colorPicker = $("#color-picker") as HTMLInputElement;
 const $colorSwatch = $("#color-swatch") as HTMLUListElement;
 const $toolsList = $("aside ul") as HTMLUListElement;
 const $canvasContainer = $("#canvas-container") as HTMLDivElement;
+const $canvasResizer = $("#canvas-resizer") as HTMLDivElement;
 const $cursor = $("#cursor") as HTMLDivElement;
 const $sizeIndicator = $("#size") as HTMLDivElement;
 const $toolIndicator = $("#tool") as HTMLDivElement;
+const $dimensionsIndicator = $("#dimensions") as HTMLDivElement;
 
 const ctx = $canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -123,6 +125,7 @@ function start() {
     bindEvents();
 
     refreshCursor();
+    refreshDimensions();
     refreshTools();
 }
 
@@ -152,10 +155,12 @@ function createSwatches() {
 
 function bindEvents() {
     // Canvas
-    $canvas.addEventListener("mousedown", onMouseDown);
-    $canvas.addEventListener("mousemove", onMouseMove);
-    $canvas.addEventListener("mouseup", onMouseUp);
-    $canvas.addEventListener("mouseleave", onMouseUp);
+    $canvasContainer.addEventListener("mousedown", onMouseDown);
+    $canvasContainer.addEventListener("mousemove", onMouseMove);
+    $canvasContainer.addEventListener("mouseup", onMouseUp);
+    $canvasContainer.addEventListener("mouseleave", onMouseUp);
+
+    $canvasResizer.addEventListener("mousedown", onResizerDown);
 
     // Color Picker
     $colorPicker.addEventListener("change", onColorChange);
@@ -182,6 +187,8 @@ function onMouseDown(e: MouseEvent) {
 
     ctx.lineWidth = strokeWidth;
     ctx.strokeStyle = selectedColor!;
+
+    if (canvasState.mode !== CanvasMode.None) return;
 
     switch (selectedTool) {
         case Tools.Rectangle:
@@ -267,6 +274,15 @@ function onMouseMove(e: MouseEvent) {
                     ctx.stroke();
                     break;
             }
+            break;
+        case CanvasMode.Resizing:
+            if (!imageData) return;
+
+            $canvas.width = x;
+            $canvas.height = y;
+
+            ctx.putImageData(imageData, 0, 0);
+            refreshDimensions();
     }
 }
 
@@ -283,6 +299,12 @@ function onMouseUp(e: MouseEvent) {
             canvasState = {
                 mode: CanvasMode.None,
             };
+            break;
+        case CanvasMode.Resizing:
+            canvasState = {
+                mode: CanvasMode.None,
+            };
+            $canvasResizer.style.pointerEvents = "auto";
             break;
     }
 
@@ -354,6 +376,21 @@ async function onToolPress(tool: Tools) {
     refreshTools();
 }
 
+function onResizerDown(e: MouseEvent) {
+    e.preventDefault();
+
+    const { clientX: x, clientY: y } = e;
+
+    imageData = ctx.getImageData(0, 0, $canvas.width, $canvas.height);
+
+    canvasState = {
+        mode: CanvasMode.Resizing,
+        lastPoint: { x, y },
+    };
+
+    $canvasResizer.style.pointerEvents = "none";
+}
+
 function refreshTools() {
     // Clear active class
     const $activeButton = $toolsList.querySelector("li.active");
@@ -373,7 +410,12 @@ function refreshCursor() {
     $cursor.style.height = `${Math.max(4, strokeWidth)}px`;
     $cursor.style.width = `${Math.max(4, strokeWidth)}px`;
 
-    $sizeIndicator.querySelector("span")!.textContent = `${strokeWidth}`;
+    $sizeIndicator.querySelector("span")!.textContent = `${strokeWidth}px`;
+}
+
+function refreshDimensions() {
+    $dimensionsIndicator.querySelectorAll("span")[0].textContent = `${$canvas.width}px`;
+    $dimensionsIndicator.querySelectorAll("span")[1].textContent = `${$canvas.height}px`;
 }
 /* -------------------------------- Internal -------------------------------- */
 

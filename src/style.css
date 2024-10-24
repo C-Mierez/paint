@@ -113,3 +113,17 @@ input[type="color"] {
         @apply relative h-6 w-6 block win-border-inv;
     }
 }
+
+#canvas-resizer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 50%);
+
+    height: 7px;
+    width: 7px;
+    background-color: black;
+    border: 1px solid white;
+
+    cursor: nwse-resize;
+}

@@ -10,6 +10,7 @@ export enum CanvasMode {
     Pencil,
     Inserting,
     Erasing,
+    Resizing,
 }
 
 export enum LayerType {
@@ -38,4 +39,8 @@ export type CanvasState =
     | {
           mode: CanvasMode.Inserting;
           layerType: LayerType.Rectangle;
+      }
+    | {
+          mode: CanvasMode.Resizing;
+          lastPoint: Point;
       };
